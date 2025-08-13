@@ -5,6 +5,7 @@ from connections.builder_connections import ConsumerAMQP
 def callback(ch, method, properties, body):
     print('A mensagem é: ', body)
 
+
 consumer_amqp = ConsumerAMQP(
     os.getenv('AMQP_HOST', 'localhost'),
     os.getenv('AMQP_PORT', 5672)

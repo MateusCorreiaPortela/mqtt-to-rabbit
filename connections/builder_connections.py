@@ -92,6 +92,7 @@ class PublisherAMQP:
             body=payload
         )
 
+
 class ConsumerAMQP:
     def __init__(
         self,
@@ -124,7 +125,7 @@ class ConsumerAMQP:
             queue=queue,
             routing_key=routing_key
         )
-    
+
     def channel_basic_consume(self, queue, on_message_callback, auto_ack=True):
         self.channel.basic_consume(
             queue=queue,
