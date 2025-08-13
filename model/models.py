@@ -2,14 +2,14 @@ from pydantic import BaseModel, ValidationError
 
 
 class RawPayloadModel(BaseModel):
-    id: int
+    id: str
     date: str
     clock: int
     flow: float
 
 
 class PayloadModel(BaseModel):
-    id: int
+    id: str
     data: str
-    relogio: str
+    relogio: int
     vazao: float

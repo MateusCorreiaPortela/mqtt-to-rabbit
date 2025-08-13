@@ -1,4 +1,5 @@
 import paho.mqtt.client as mqtt
+import pika
 from time import sleep
 
 
@@ -9,12 +10,12 @@ class ConsumerMQTT:
         on_connect, on_message
     ):
         self.client = mqtt.Client()
-        self.host = host,
-        self.port = port,
-        self.keepalive = keepalive,
-        self.topic = topic,
+        self.host = host
+        self.port = port
+        self.keepalive = keepalive
+        self.topic = topic
         self.on_connect = on_connect
-        self.on_message = on_message,
+        self.on_message = on_message
 
     def config_connect(self):
         self.client.connect(
@@ -22,6 +23,7 @@ class ConsumerMQTT:
             self.port,
             self.keepalive
         )
+        self.client.subscribe(self.topic)
         self.client.on_connect = self.on_connect
         self.client.on_message = self.on_message
         self.client.loop_forever()
@@ -47,3 +49,45 @@ class PublisherMQTT:
             sleep(10)
 
         self.client.loop_stop()
+
+
+class PublisherAMQP:
+    def __init__(
+        self,
+        host,
+        port
+    ):
+        self.connection = pika.BlockingConnection(
+            pika.ConnectionParameters(host, port)
+        )
+
+        self.channel = self.connection.channel()
+
+    def declarete(self, fila, exchange):
+        if not fila:
+            return
+
+        self.channel.queue_declare(queue=fila)
+        self.channel.exchange_declare(exchange=exchange)
+
+    def queue_bind(self, exchange, queue, routing_key):
+        if (
+            not exchange
+            or not queue
+            or not routing_key
+        ):
+            return
+
+        self.channel.queue_bind(
+            exchange=exchange,
+            queue=queue,
+            routing_key=routing_key
+        )
+
+    def basic_publish(self, exchange, routing_key, payload):
+
+        self.channel.basic_publish(
+            exchange=exchange,
+            routing_key=routing_key,
+            body=payload
+        )
