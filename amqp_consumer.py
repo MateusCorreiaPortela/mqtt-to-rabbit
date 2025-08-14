@@ -2,6 +2,11 @@ import os
 from connections.builder_connections import ConsumerAMQP
 
 
+QUEUE_AMQP = os.getenv('QUEUE_AMQP', 'fila_teste')
+EXCHANGE_QUEUE = os.getenv('EXCHANGE_AMQP', 'exchange_teste')
+KEY_AMQP = os.getenv('KEY_AMQP', 'chave_teste')
+
+
 def callback(ch, method, properties, body):
     print('A mensagem é: ', body)
 
@@ -12,18 +17,18 @@ consumer_amqp = ConsumerAMQP(
 )
 
 consumer_amqp.declarete(
-        os.getenv('QUEUE_AMQP', 'fila_teste'),
-        os.getenv('EXCHANGE_AMQP', 'exchange_teste')
+        QUEUE_AMQP,
+        EXCHANGE_QUEUE
     )
 
 consumer_amqp.queue_bind(
-    os.getenv('EXCHANGE_AMQP', 'exchange_teste'),
-    os.getenv('QUEUE_AMQP', 'fila_teste'),
-    os.getenv('KEY_AMQP', 'chave_teste')
+    EXCHANGE_QUEUE,
+    QUEUE_AMQP,
+    KEY_AMQP
 )
 
 consumer_amqp.channel_basic_consume(
-    os.getenv('QUEUE_AMQP', 'fila_teste'),
+    QUEUE_AMQP,
     callback,
 )
 

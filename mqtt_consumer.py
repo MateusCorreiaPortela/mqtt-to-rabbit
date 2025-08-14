@@ -4,6 +4,11 @@ from connections.builder_connections import ConsumerMQTT, PublisherAMQP
 from parsers.parser_packet import parser_mqtt
 
 
+QUEUE_AMQP = os.getenv('QUEUE_AMQP', 'fila_teste')
+EXCHANGE_QUEUE = os.getenv('EXCHANGE_AMQP', 'exchange_teste')
+KEY_AMQP = os.getenv('KEY_AMQP', 'chave_teste')
+
+
 def on_connect(client, userdata, flags, rc):
     print(f'\033[1;32mConectado ao Broker MQTT\033[m: {rc}')
 
@@ -18,19 +23,19 @@ def on_message(client, userdata, msg):
         return
 
     publisher_amqp.declarete(
-        os.getenv('QUEUE_AMQP', 'fila_teste'),
-        os.getenv('EXCHANGE_AMQP', 'exchange_teste')
+        QUEUE_AMQP,
+        EXCHANGE_QUEUE
     )
 
     publisher_amqp.queue_bind(
-        os.getenv('EXCHANGE_AMQP', 'exchange_teste'),
-        os.getenv('QUEUE_AMQP', 'fila_teste'),
-        os.getenv('KEY_AMQP', 'chave_teste')
+        EXCHANGE_QUEUE,
+        QUEUE_AMQP,
+        KEY_AMQP
     )
 
     publisher_amqp.basic_publish(
-        os.getenv('EXCHANGE_AMQP', 'exchange_teste'),
-        os.getenv('KEY_AMQP', 'chave_teste'),
+        EXCHANGE_QUEUE,
+        KEY_AMQP,
         json.dumps(payload)
     )
 
