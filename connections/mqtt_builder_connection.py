@@ -45,6 +45,7 @@ class PublisherMQTT:
             self.client.publish(
                 self.topic, payload
             )
+            print(f'Mensagem publicada: {payload}')
             sleep(10)
 
         self.client.loop_stop()
