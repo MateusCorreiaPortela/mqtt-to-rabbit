@@ -1,4 +1,4 @@
-from connections.builder_connections import PublisherMQTT
+from connections.mqtt_builder_connection import PublisherMQTT
 import os
 import json
 

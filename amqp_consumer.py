@@ -1,5 +1,7 @@
 import os
-from connections.builder_connections import ConsumerAMQP
+import json
+from connections.rabbitmq_builder_connection import ConsumerAMQP
+from connections.database_builder_connection import MongoDB
 
 
 QUEUE_AMQP = os.getenv('QUEUE_AMQP', 'fila_teste')
@@ -9,6 +11,8 @@ KEY_AMQP = os.getenv('KEY_AMQP', 'chave_teste')
 
 def callback(ch, method, properties, body):
     print('A mensagem é: ', body)
+    client_mongo.colecao.insert_one(json.loads(body))
+    print('\033[1;32mA mensagem foi gravada no banco com sucesso!\033[m', body)
 
 
 consumer_amqp = ConsumerAMQP(
@@ -30,6 +34,12 @@ consumer_amqp.queue_bind(
 consumer_amqp.channel_basic_consume(
     QUEUE_AMQP,
     callback,
+)
+
+client_mongo = MongoDB(
+    os.getenv('MONGO_HOST', 'localhost'),
+    os.getenv('MONGO_DATABASE', 'banco_teste'),
+    os.getenv('MONGO_COLLECTION', 'colecao_teste')
 )
 
 try:
