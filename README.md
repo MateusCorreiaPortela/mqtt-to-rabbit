@@ -4,6 +4,7 @@ docker run -d \
   --name rabbitmq \
   -p 5672:5672 \
   -p 15672:15672 \
+  --network servico_rede \
   rabbitmq:3-management
 
 
@@ -11,18 +12,14 @@ docker run -d \
 docker run -d \
   --name mongodb \
   -p 27017:27017 \
-  -e MONGO_INITDB_ROOT_USERNAME=admin \
-  -e MONGO_INITDB_ROOT_PASSWORD=admin \
+  --network servico_rede \
   mongo:latest
 
 # Mongo Express
 docker run -d \
   --name mongo-express \
   -p 8081:8081 \
-  -e ME_CONFIG_MONGODB_ADMINUSERNAME=admin \
-  -e ME_CONFIG_MONGODB_ADMINPASSWORD=admin \
-  -e ME_CONFIG_MONGODB_SERVER=mongodb \
-  --link mongodb:mongo \
+  --network servico_rede \
   mongo-express:latest
 
 #EMQX

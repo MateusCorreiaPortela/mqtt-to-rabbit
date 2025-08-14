@@ -2,6 +2,7 @@ import os
 import json
 from connections.builder_connections import ConsumerMQTT, PublisherAMQP
 from parsers.parser_packet import parser_mqtt
+from pymongo import MongoClient
 
 
 QUEUE_AMQP = os.getenv('QUEUE_AMQP', 'fila_teste')
@@ -14,8 +15,8 @@ def on_connect(client, userdata, flags, rc):
 
 
 def on_message(client, userdata, msg):
-    print(f'\033[1;34mTOPIC\033[m]: {msg.topic}')
-    print(f'\033[1;34mMENSAGEM RECEBIDA: {msg.payload}')
+    print(f'\033[1;34mTOPIC\033[m: {msg.topic}')
+    print(f'\033[1;34mMENSAGEM RECEBIDA\033[m: {msg.payload}')
 
     payload = json.loads(msg.payload)
 

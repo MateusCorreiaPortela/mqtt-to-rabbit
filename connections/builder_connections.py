@@ -1,7 +1,7 @@
 import paho.mqtt.client as mqtt
 import pika
 from time import sleep
-
+from pymongo import MongoClient
 
 class ConsumerMQTT:
     def __init__(
@@ -132,3 +132,14 @@ class ConsumerAMQP:
             on_message_callback=on_message_callback,
             auto_ack=auto_ack
         )
+
+class MongoDB:
+    def __init__(
+        self, 
+        host,
+        name_database,
+        name_collection,
+    ):
+        self.client = MongoClient(host)
+        self.db = self.client[name_database]
+        self.colecao = self.db[name_collection]
