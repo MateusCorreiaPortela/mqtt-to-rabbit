@@ -1,0 +1,53 @@
+services:
+
+  emqx: 
+    image: emqx:latest
+    container_name: emqx
+    ports:
+      - 1884:1883
+      - 18083:18083
+    networks:
+      - rede
+
+    restart: always
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - rede
+    depends_on:
+      - emqx
+  
+  mongodb:
+    image: mongo:latest
+    container_name: mongo
+    volumes:
+      - mongodb_data:data/db
+    ports:
+      - 27017:27017
+    networks:
+      - rede
+    depends_on:
+      - rabbitmq
+  
+  mongo-express:
+    image: mongo-express:latest
+    container_name: mongo-express
+    ports:
+      - 8075:8081
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongo
+    networks:
+      - rede
+    depends_on:
+      - mongo
+
+volumes:
+  mongodb_data:
+
+networks:
+  rede:

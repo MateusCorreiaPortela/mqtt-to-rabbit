@@ -1,6 +1,6 @@
 import os
 import json
-from connections.builder_connections import ConsumerMQTT, PublisherAMQP
+from connections.builder_connections import ConsumerMQTT, PublisherAMQP, MongoDB
 from parsers.parser_packet import parser_mqtt
 from pymongo import MongoClient
 
@@ -41,13 +41,19 @@ def on_message(client, userdata, msg):
     )
 
 
+client_mongo = MongoDB(
+    os.getenv('MONGO_HOST', 'localhost'),
+    os.getenv('MONGO_DATABASE', 'banco_teste'),
+    os.getenv('MONGO_COLLECTION', 'colecao_teste')
+)
+
 publisher_amqp = PublisherAMQP(
     os.getenv('AMQP_HOST', '172.17.0.2'),
     os.getenv('AMQP_PORT', 5672)
 )
 
 consumer_mqtt = ConsumerMQTT(
-    os.getenv('MQTT_HOST', 'localhost'),
+    os.getenv('MQTT_HOST', 'mongodb://mongo:localhost'),
     os.getenv('MQTT_PORT', 1883),
     os.getenv('MQTT_KEEPALIVE', 60),
     os.getenv('MQTT_TOPIC', 'topico_teste'),

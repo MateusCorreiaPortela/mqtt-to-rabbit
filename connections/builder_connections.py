@@ -3,6 +3,7 @@ import pika
 from time import sleep
 from pymongo import MongoClient
 
+
 class ConsumerMQTT:
     def __init__(
         self, host, port,
@@ -133,9 +134,10 @@ class ConsumerAMQP:
             auto_ack=auto_ack
         )
 
+
 class MongoDB:
     def __init__(
-        self, 
+        self,
         host,
         name_database,
         name_collection,
