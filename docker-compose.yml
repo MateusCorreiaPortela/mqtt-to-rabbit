@@ -26,7 +26,7 @@ services:
     image: mongo:latest
     container_name: mongo
     volumes:
-      - mongodb_data:data/db
+      - mongodb_data:/data/db
     ports:
       - 27017:27017
     networks:
@@ -41,10 +41,12 @@ services:
       - 8075:8081
     environment:
       - ME_CONFIG_MONGODB_SERVER=mongo
+      - ME_CONFIG_BASICAUTH_USERNAME=admin
+      - ME_CONFIG_BASICAUTH_PASSWORD=1234
     networks:
       - rede
     depends_on:
-      - mongo
+      - mongodb
 
 volumes:
   mongodb_data:

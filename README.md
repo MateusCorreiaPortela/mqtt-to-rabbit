@@ -2,46 +2,52 @@ O projeto tem como objetivo simular um publisher que envia mensagens via MQTT pa
 Após o tratamento, essas informações são encaminhadas para uma fila no RabbitMQ, onde outro serviço atua como consumidor dessa fila.
 Esse consumidor, por sua vez, é responsável por persistir os dados no banco de dados MongoDB
 
-[Publisher MQTT]
-        │
-        ▼
+Publisher MQTT: Simula o comportamento de um dispositivo publicando mensagens em um broker MQTT, enviando pacotes para um tópico específico previamente definido.
 
-[Cliente MQTT]
- - Recebe mensagem
- - Valida dados
- - Trata/transforma informações
-        │
-        ▼
-
-[Producer RabbitMQ]
- - Publica dados tratados na fila
-        │
-        ▼
-
-[Consumer RabbitMQ]
- - Consome mensagens da fila
- - Persiste no MongoDB
-        │
-        ▼
-  
-[MongoDB]
- - Armazena os dados
+Cliente MQTT: Se conecta ao broker e inscrever-se no tópico, recebe a mensagem do dispositivo, valida o pacote recebido, se conecta como um publisher do rabbit encaminhando o pacote validado para fila do rabbitmq
 
 
-# RabbitMQ
-docker run -d -p 5672:5672 -p 15672:15672 --network servicos_rede rabbitmq:3-management
+Consumidor RabbitMQ: Consome o pacote ja tratado da fila do rabbitmq e persiste os dados no banco de dados MongoDB
 
-# MongoDB
-docker run -d -p 27020:27017 --network servicos_rede mongo:latest
 
-# Mongo Express
-docker run -d -p 8075:8081 --network servicos_rede mongo-express:latest
+# Como testar o projeto
 
-#EMQX
-docker run -d --name emqx \
-  -p 1883:1883 \    # MQTT TCP
-  -p 8883:8883 \    # MQTT TLS
-  -p 8083:8083 \    # MQTT WebSocket
-  -p 8084:8084 \    # MQTT WebSocket TLS
-  -p 18083:18083 \  # Painel de administração
-  emqx/emqx:latest
+--primeiro rode o comando:
+
+docker compose up -d
+
+
+--depois inicie um container python usando o seguinte comando
+
+docker run -it --rm --name projeto_teste --network projeto_mqtt_v2_rede -v "$PWD":/server -w /server python:3.13 bash
+
+
+--nesse container crie um ambiente virtual com o comando
+
+python -m venv venv
+
+--ative o ambiente:
+
+source venv/bin/activate
+
+
+--instale as dependencias
+
+pip install -r requirements.txt
+
+--depois abra mais 2 terminais e rode esse comando em cada um
+
+docker exec -it projeto_teste bash
+
+--ative o ambiente nos dois container
+
+source venv/bin/activate
+
+
+--primero no seu navegador abra os serviços
+
+mongo-express:
+localhost:8075
+
+rabbitmq:
+15672
