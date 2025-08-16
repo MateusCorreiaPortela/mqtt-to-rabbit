@@ -11,7 +11,7 @@ example_payload = {
 }
 
 publisher = PublisherMQTT(
-    os.getenv('HOST', 'localhost'),
+    os.getenv('HOST', 'emqx'),
     os.getenv('PORT', 1883),
     os.getenv('KEEPALIVE', 60),
     os.getenv('TOPIC', 'topico_teste')

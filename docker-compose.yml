@@ -4,7 +4,7 @@ services:
     image: emqx:latest
     container_name: emqx
     ports:
-      - 1884:1883
+      - 1883:1883
       - 18083:18083
     networks:
       - rede

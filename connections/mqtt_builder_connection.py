@@ -32,7 +32,13 @@ class ConsumerMQTT:
 
 
 class PublisherMQTT:
-    def __init__(self, host, port, keepalive, topic):
+    def __init__(
+            self,
+            host,
+            port,
+            keepalive,
+            topic
+        ):
         self.client = mqtt.Client()
         self.client.connect(
             host, port, keepalive

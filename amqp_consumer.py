@@ -16,7 +16,7 @@ def callback(ch, method, properties, body):
 
 
 consumer_amqp = ConsumerAMQP(
-    os.getenv('AMQP_HOST', 'localhost'),
+    os.getenv('AMQP_HOST', 'rabbitmq'),
     os.getenv('AMQP_PORT', 5672)
 )
 
@@ -37,7 +37,7 @@ consumer_amqp.channel_basic_consume(
 )
 
 client_mongo = MongoDB(
-    os.getenv('MONGO_HOST', 'localhost'),
+    os.getenv('MONGO_HOST', 'mongo'),
     os.getenv('MONGO_DATABASE', 'banco_teste'),
     os.getenv('MONGO_COLLECTION', 'colecao_teste')
 )
