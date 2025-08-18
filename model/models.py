@@ -14,6 +14,7 @@ class RawPayloadModel(BaseModel):
     def get_cont(self) -> list:
         return [self.count_1, self.count_2, self.count_3]
 
+
 class PayloadModel(BaseModel):
     id: str
     data: str

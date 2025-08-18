@@ -33,16 +33,14 @@ class ConsumerMQTT:
 
 class PublisherMQTT:
     def __init__(
-            self,
-            host,
-            port,
-            keepalive,
-            topic
-        ):
+        self,
+        host,
+        port,
+        keepalive,
+        topic
+    ):
         self.client = mqtt.Client()
-        self.client.connect(
-            host, port, keepalive
-        )
+        self.client.connect(host, port, keepalive)
         self.topic = topic
 
     def publisher(self, payload):
