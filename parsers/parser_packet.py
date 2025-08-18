@@ -9,7 +9,8 @@ def parser_mqtt(paylaod):
             id=raw_payload.id,
             data=raw_payload.date,
             relogio=raw_payload.clock,
-            vazao=raw_payload.flow
+            vazao=raw_payload.flow,
+            contador=raw_payload.get_cont
         ).model_dump(exclude_none=True)
 
     except ValueError as e:
